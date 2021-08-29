@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
-import resellerService from "../service/reseller.service";
 import debug from "debug";
 import { httpStatusCode } from "../../common/common.httpStatusCodes";
 import argon2d from "argon2";
+import resellersService from "../service/resellers.service";
 
 const log: debug.IDebugger = debug("app:resellers-middleware");
 
@@ -13,7 +13,7 @@ class ResellersMiddleware {
     next: NextFunction
   ) {
     const cpf = req.body.cpf;
-    const reseller = await resellerService.validateExistingReseller(cpf);
+    const reseller = await resellersService.validateExistingReseller(cpf);
 
     if (reseller) {
       res.status(httpStatusCode.BAD_REQUEST).send({
@@ -30,7 +30,7 @@ class ResellersMiddleware {
     next: NextFunction
   ) {
     const resellerCpf = req.body.resellerCpf;
-    const reseller = await resellerService.getResellerByCpf(resellerCpf);
+    const reseller = await resellersService.getResellerByCpf(resellerCpf);
 
     if (!reseller) {
       res.status(httpStatusCode.BAD_REQUEST).send({
@@ -46,7 +46,7 @@ class ResellersMiddleware {
     res: Response,
     next: NextFunction
   ) {
-    const reseller = await resellerService.validateEmailAlreadyInUse(req.body.email);
+    const reseller = await resellersService.validateEmailAlreadyInUse(req.body.email);
 
     if (reseller) {
       res.status(httpStatusCode.BAD_REQUEST).send({
@@ -62,7 +62,7 @@ class ResellersMiddleware {
     res: Response,
     next: NextFunction
   ) {
-    const reseller = await resellerService.getResellerWithPasswordHashByEmail(req.body.email);
+    const reseller = await resellersService.getResellerWithPasswordHashByEmail(req.body.email);
 
     if (reseller === null) {
       res.status(httpStatusCode.BAD_REQUEST).send({

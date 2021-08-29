@@ -2,7 +2,7 @@ import argon2d from "argon2";
 import debug from "debug";
 import express, { Request, Response } from "express";
 import { httpStatusCode } from "../../common/common.httpStatusCodes";
-import resellerService from "../service/reseller.service";
+import resellersService from "../service/resellers.service";
 
 const log: debug.IDebugger = debug("app:resellers-controller");
 
@@ -12,7 +12,7 @@ class ResellersController {
       const pendingToCreateReseller = req.body;
       pendingToCreateReseller.password = await argon2d.hash(pendingToCreateReseller.password);
 
-      const resellerId = await resellerService.create(pendingToCreateReseller);
+      const resellerId = await resellersService.create(pendingToCreateReseller);
       res.status(httpStatusCode.OK).send({
         resellerId
       });
@@ -25,7 +25,7 @@ class ResellersController {
 
   async loginReseller(req: Request, res: Response) {
     try {
-      const loggedResellerInfo = await resellerService.getResellerByEmail(req.body.email);
+      const loggedResellerInfo = await resellersService.getResellerByEmail(req.body.email);
 
       if (loggedResellerInfo) {
         res.status(httpStatusCode.OK).send(loggedResellerInfo);
