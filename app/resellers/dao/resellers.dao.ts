@@ -3,7 +3,7 @@ import debug from "debug";
 import mongooseService from "../../common/services/mongoose.service";
 import { CreateResellerDto } from "../dtos/create.reseller.dto";
 
-const log: debug.IDebugger = debug("app:reseller-dao");
+const log: debug.IDebugger = debug("app:resellers-dao");
 
 class ResellersDao {
   Schema = mongooseService.getMongoose().Schema;
@@ -14,7 +14,7 @@ class ResellersDao {
     cpf: String,
     email: String,
     password: { type: String, select: false },
-    top_seller: { type: Boolean, default: false },
+    topSeller: { type: Boolean, default: false },
   });
 
   Resellers = mongooseService.getMongoose().model("Resellers", this.resellerSchema);
