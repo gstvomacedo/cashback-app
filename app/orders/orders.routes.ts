@@ -29,7 +29,7 @@ export class OrdersRoutes extends CommonRoutesConfig {
 
     this.app
       .get("/orders/:orderId", [
-        param("userId")
+        param("orderId")
           .isString(),
         ordersController.getOrderById
       ]);
