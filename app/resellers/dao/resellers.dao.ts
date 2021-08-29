@@ -43,9 +43,9 @@ class ResellersDao {
     return this.Resellers.findOne({ email }).exec();
   }
 
-  async getPasswordHashByEmail(email: string) {
+  async getResellerWithPasswordHashByEmail(email: string) {
     const resellerObj: CreateResellerDto | any = await this.Resellers.findOne({ email }, 'password').exec();
-    return resellerObj.password;
+    return resellerObj;
   }
 }
 

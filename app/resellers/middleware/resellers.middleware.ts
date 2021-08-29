@@ -62,16 +62,15 @@ class ResellersMiddleware {
     res: Response,
     next: NextFunction
   ) {
-    log("fdgefrerferg");
-    const passwordHash = await resellerService.getPasswordHashByEmail(req.body.email);
-    log(passwordHash);
+    const reseller = await resellerService.getResellerWithPasswordHashByEmail(req.body.email);
 
-    if (passwordHash === null) {
+    if (reseller === null) {
       res.status(httpStatusCode.BAD_REQUEST).send({
-        error: "Não foi possível encontrar o usuário para o email informado."
+        error: `Não foi possível encontrar o usuário para o email informado (${req.body.email}).`
       });
+      return;
     }
-    const passwordMatchesWithHash = await argon2d.verify(String(passwordHash), req.body.password)
+    const passwordMatchesWithHash = await argon2d.verify(String(reseller.password), req.body.password)
 
     if (passwordMatchesWithHash) {
       next();

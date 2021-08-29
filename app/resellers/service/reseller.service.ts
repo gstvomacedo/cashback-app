@@ -18,8 +18,8 @@ class ResellersService {
     return resellersDao.getResellerByEmail(email);
   }
 
-  async getPasswordHashByEmail(email: string) {
-    return resellersDao.getPasswordHashByEmail(email);
+  async getResellerWithPasswordHashByEmail(email: string) {
+    return resellersDao.getResellerWithPasswordHashByEmail(email);
   }
 
   async getResellerByCpf(cpf: string) {
