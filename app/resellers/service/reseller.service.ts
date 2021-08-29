@@ -1,4 +1,4 @@
-import { CreateResellerDto } from "../dtos/create.reseller.dto";
+import { CreateResellerDto } from "../dtos/create-reseller.dto";
 import resellersDao from "../dao/resellers.dao";
 
 class ResellersService {
@@ -20,6 +20,10 @@ class ResellersService {
 
   async getPasswordHashByEmail(email: string) {
     return resellersDao.getPasswordHashByEmail(email);
+  }
+
+  async getResellerByCpf(cpf: string) {
+    return resellersDao.getResellerByCpf(cpf);
   }
 }
 

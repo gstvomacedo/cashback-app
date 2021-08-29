@@ -24,6 +24,23 @@ class ResellersMiddleware {
     }
   }
 
+  async validateNotExistingReseller(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const resellerCpf = req.body.resellerCpf;
+    const reseller = await resellerService.getResellerByCpf(resellerCpf);
+
+    if (!reseller) {
+      res.status(httpStatusCode.BAD_REQUEST).send({
+        error: `Não foi possível encontrar um revendedor para o CPF informado (${resellerCpf}).`
+      });
+    } else {
+      next();
+    }
+  }
+
   async validateEmailAlreadyInUse(
     req: Request,
     res: Response,
