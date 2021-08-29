@@ -12,6 +12,7 @@ class OrdersDao {
   orderSchema = new this.Schema({
     _id: String,
     buyerEmail: String,
+    buyerCpf: String,
     resellerCpf: String,
     status: { type: String, enum: OrderStatus, default: OrderStatus.PENDING },
     date: Date,
@@ -43,6 +44,10 @@ class OrdersDao {
 
   async getOrderById(orderId: string) {
     return this.Orders.findOne({ _id: orderId }).exec();
+  }
+
+  async getOrdersByBuyerCpf(buyerCpf: string) {
+    return this.Orders.findOne({ buyerCpf }).exec();
   }
 }
 

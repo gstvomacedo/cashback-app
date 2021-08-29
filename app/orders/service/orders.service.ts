@@ -1,6 +1,6 @@
 import { CreateOrderDto } from "../dtos/create-order.dao";
 import ordersDao from "../dao/orders.dao";
-import resellerService from "../../resellers/service/reseller.service";
+import resellerService from "../../resellers/service/resellers.service";
 import { OrderStatus } from "../../resellers/interfaces/order-status.interface";
 
 class OrdersService {
@@ -27,6 +27,10 @@ class OrdersService {
 
   async getOrderById(orderId: string) {
     return ordersDao.getOrderById(orderId);
+  }
+
+  async getOrdersByBuyerCpf(cpf: string) {
+    return ordersDao.getOrdersByBuyerCpf(cpf);
   }
 
   private calculateCashback(order: CreateOrderDto): CreateOrderDto {

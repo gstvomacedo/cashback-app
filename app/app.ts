@@ -1,5 +1,7 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, Router } from "express";
 import * as http from "http";
+
+import * as dotenv from "dotenv";
 
 import * as winston from "winston";
 import * as expressWinston from "express-winston";
@@ -9,7 +11,9 @@ import debug from "debug";
 import { httpStatusCode } from "./common/common.httpStatusCodes";
 import { ResellersRoutes } from "./resellers/resellers.routes";
 import { OrdersRoutes } from "./orders/orders.routes";
+import { CashbackRoutes } from "./cashback/cashback.routes";
 
+dotenv.config();
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
 const port = 3000;
@@ -36,6 +40,7 @@ app.use(expressWinston.logger(loggerOptions));
 
 routes.push(new ResellersRoutes(app));
 routes.push(new OrdersRoutes(app));
+routes.push(new CashbackRoutes(app));
 
 const serverStartedMessage = `Node server started at http://localhost:${port}`;
 app.get('/', (req: Request, res: Response) => {

@@ -17,6 +17,10 @@ export class OrdersRoutes extends CommonRoutesConfig {
         body("buyerEmail").isEmail(),
         body("resellerCpf").isString(),
         body("price").isNumeric(),
+        body("buyerCpf")
+        .isString()
+        .isLength({ min:11, max: 11 })
+        .withMessage("O CPF deve ser enviado sem characteres especiais"),
         bodyValidationMiddleware.verifyBodyFieldErrors,
         resellersMiddleware.validateNotExistingReseller,
         ordersController.addOrder

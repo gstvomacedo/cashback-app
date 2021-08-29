@@ -17,7 +17,7 @@ export class ResellersRoutes extends CommonRoutesConfig {
         body("name").isString(),
         body("cpf")
           .isString()
-          .isLength({ min:11, max: 11})
+          .isLength({ min:11, max: 11 })
           .withMessage("O CPF deve ser enviado sem characteres especiais"),
         body("email").isEmail(),
         body("password")
