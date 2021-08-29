@@ -3,5 +3,5 @@ export interface CreateResellerDto {
   cpf: String,
   email: String,
   password: String,
-  top_seller?: Boolean,
+  topSeller?: Boolean,
 }

@@ -1,7 +1,7 @@
 import shortid from "shortid";
 import debug from "debug";
 import mongooseService from "../../common/services/mongoose.service";
-import { CreateResellerDto } from "../dtos/create.reseller.dto";
+import { CreateResellerDto } from "../dtos/create-reseller.dto";
 
 const log: debug.IDebugger = debug("app:resellers-dao");
 
@@ -24,8 +24,7 @@ class ResellersDao {
   }
 
   async addReseller(resellerFields: CreateResellerDto) {
-    const resellerId = shortid.generate();
-    log(resellerFields);
+    const resellerId = shortid.generate().toUpperCase();
     const reseller = new this.Resellers({
       _id: resellerId,
       ...resellerFields,
@@ -36,7 +35,8 @@ class ResellersDao {
   }
 
   async getResellerByCpf(cpf: string) {
-    return this.Resellers.findOne({ cpf }).exec();
+    const resellerObj: CreateResellerDto | any = await this.Resellers.findOne({ cpf }).exec();
+    return resellerObj;
   }
 
   async getResellerByEmail(email: string) {
