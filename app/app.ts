@@ -8,6 +8,7 @@ import { CommonRoutesConfig } from "./common/common.routes.config";
 import debug from "debug";
 import { httpStatusCode } from "./common/common.httpStatusCodes";
 import { ResellersRoutes } from "./resellers/resellers.routes";
+import { OrdersRoutes } from "./orders/orders.routes";
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -34,6 +35,7 @@ if (!process.env.DEBUG) {
 app.use(expressWinston.logger(loggerOptions));
 
 routes.push(new ResellersRoutes(app));
+routes.push(new OrdersRoutes(app));
 
 const serverStartedMessage = `Node server started at http://localhost:${port}`;
 app.get('/', (req: Request, res: Response) => {

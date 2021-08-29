@@ -11,7 +11,7 @@ class ResellersController {
     try {
       const pendingToCreateReseller = req.body;
       pendingToCreateReseller.password = await argon2d.hash(pendingToCreateReseller.password);
-      log(pendingToCreateReseller)
+
       const resellerId = await resellerService.create(pendingToCreateReseller);
       res.status(httpStatusCode.OK).send({
         resellerId
