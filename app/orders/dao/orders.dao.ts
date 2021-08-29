@@ -36,6 +36,14 @@ class OrdersDao {
     await order.save();
     return order;
   }
+
+  async listOrders() {
+    return this.Orders.find().exec();
+  }
+
+  async getOrderById(orderId: string) {
+    return this.Orders.findOne({ _id: orderId }).exec();
+  }
 }
 
 export default new OrdersDao();

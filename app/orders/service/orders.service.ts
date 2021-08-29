@@ -21,6 +21,14 @@ class OrdersService {
     return order;
   }
 
+  async listOrders() {
+    return ordersDao.listOrders();
+  }
+
+  async getOrderById(orderId: string) {
+    return ordersDao.getOrderById(orderId);
+  }
+
   private calculateCashback(order: CreateOrderDto): CreateOrderDto {
     const cashbackLevels = [
       {

@@ -24,6 +24,36 @@ class OrdersController {
       });
     }
   }
+
+  async listOrders(req: Request, res: Response) {
+    try {
+      const orders = await ordersService.listOrders();
+      res.status(httpStatusCode.OK).send(orders);
+    } catch (err) {
+      res.status(httpStatusCode.BAD_REQUEST).send({
+        error: `Ocorreu um erro. ${err}`
+      });
+    }
+  }
+
+  async getOrderById(req: Request, res: Response) {
+    try {
+      const orderId = req.params.orderId;
+      const order = await ordersService.getOrderById(orderId);
+
+      if (order) {
+        res.status(httpStatusCode.OK).send(order);
+      } else {
+        res.status(httpStatusCode.NOT_FOUND).send({
+          error: `Não foi possível encontrar uma compra com o ID: ${orderId}.`
+        })
+      }
+    } catch (err) {
+      res.status(httpStatusCode.BAD_REQUEST).send({
+        error: `Ocorreu um erro. ${err}`
+      });
+    }
+  }
 }
 
 export default new OrdersController();
