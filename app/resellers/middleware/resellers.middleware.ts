@@ -41,6 +41,15 @@ class ResellersMiddleware {
     }
   }
 
+  async extractResellerCpfFromToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    req.body.resellerCpf = res.locals.jwt.cpf
+    next();
+  }
+
   async validateEmailAlreadyInUse(
     req: Request,
     res: Response,

@@ -16,7 +16,6 @@ export class OrdersRoutes extends CommonRoutesConfig {
       .route("/orders")
       .post(
         body("buyerEmail").isEmail(),
-        body("resellerCpf").isString(),
         body("price").isNumeric(),
         body("buyerCpf")
         .isString()
@@ -24,7 +23,7 @@ export class OrdersRoutes extends CommonRoutesConfig {
         .withMessage("O CPF deve ser enviado sem characteres especiais"),
         jwtMiddleware.validJwtNeeded,
         bodyValidationMiddleware.verifyBodyFieldErrors,
-        resellersMiddleware.validateNotExistingReseller,
+        resellersMiddleware.extractResellerCpfFromToken,
         ordersController.addOrder
       );
 
