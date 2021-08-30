@@ -6,7 +6,7 @@ import jwtMiddleware from "../auth/middleware/jwt.middleware";
 
 export class CashbackRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
-    super(app, "ChargebackRoutes")
+    super(app, "CashbackRoutes")
   }
 
   configureRoutes() {
