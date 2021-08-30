@@ -1,0 +1,419 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Cashback APP",
+        "description": "API responsável por cadastrar compras e calcular cashbacks",
+        "contact": {
+            "email": "gstvomacedo@gmail.com"
+        }
+    },
+    "servers": [{
+        "url": "http://localhost:3000",
+        "description": "API"
+    }],
+    "paths": {
+        "/resellers": {
+            "post": {
+                "summary": "Cadastro de revendedor",
+                "description": "Rota responsável pelo cadastramento de revendedor",
+                "tags": ["Resellers (Revendedores)"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Reseller"
+                            },
+                            "examples": {
+                                "Revendedora comum": {
+                                    "value": {
+                                        "name": "Maria",
+                                        "cpf": "12345678911",
+                                        "email": "maria@franquia.com",
+                                        "password": "12345",
+                                        "topSeller": false
+                                    }
+                                },
+                                "Revendedora topSeller (aprovação automatica de vendas)": {
+                                    "value": {
+                                        "name": "Paula",
+                                        "cpf": "12345678912",
+                                        "email": "paula@franquia.com",
+                                        "password": "12345",
+                                        "topSeller": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Revendedor cadastrado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro durante cadastro do revendedor"
+                    }
+                }
+            }
+        },
+        "/auth": {
+            "post": {
+                "summary": "Login do revendedor",
+                "description": "Rota responsável pelo login do revendedor, retorno do token jwt",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResellerLogin"
+                            },
+                            "examples": {
+                                "Login Maria": {
+                                    "value": {
+                                        "email": "maria@franquia.com",
+                                        "password": "12345"
+                                    }
+                                },
+                                "Login Paula": {
+                                    "value": {
+                                        "email": "paula@franquia.com",
+                                        "password": "12345"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Token gerado para login"
+                    },
+                    "400": {
+                        "description": "Email ou senha inválido"
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "post": {
+                "summary": "Cadastrar compra",
+                "description": "Cadastrar nova compra realizada",
+                "tags": ["Orders (Compras)"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateOrder"
+                            },
+                            "examples": {
+                                "Cadastrar compra (10% cashback)": {
+                                    "value": {
+                                        "buyerEmail": "comprador@email.com",
+                                        "buyerCpf": "32146161054",
+                                        "price": 100
+                                    }
+                                },
+                                "Cadastrar compra (15% cashback)": {
+                                    "value": {
+                                        "buyerEmail": "comprador@email.com",
+                                        "buyerCpf": "32146161054",
+                                        "price": 1300
+                                    }
+                                },
+                                "Cadastrar compra (20% cashback)": {
+                                    "value": {
+                                        "buyerEmail": "comprador@email.com",
+                                        "buyerCpf": "32146161054",
+                                        "price": 2500
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Compra cadastrada com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro no cadastro da compra"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Listar compras",
+                "description": "Lista todas as compras existentes",
+                "tags": ["Orders (Compras)"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Listagem das compras",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrdersList"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na listagem das compras"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/orders/orderId": {
+            "get": {
+                "summary": "Listar compra por ID",
+                "description": "Lista compra por ID informado",
+                "tags": ["Orders (Compras)"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Obtem compra",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na listagem das compras"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/orders/{orderId}": {
+            "get": {
+                "summary": "Listar compra por ID",
+                "description": "Lista compra por ID informado",
+                "tags": ["Orders (Compras)"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "parameters": [
+					{
+						"name": "orderId",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+                "responses": {
+                    "200": {
+                        "description": "Obtem compra",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na listagem da compra"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/cashback/{buyerCpf}": {
+            "get": {
+                "summary": "Obter cashback do comprador",
+                "description": "Obter cashback total do comprador por CPF",
+                "tags": [ "Cashback" ],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "parameters": [
+					{
+						"name": "buyerCpf",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+                "responses": {
+                    "200": {
+                        "description": "Lista total de cashback do comprador"
+                    }, 
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Reseller": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Nome do revendedor"
+                    },
+                    "cpf": {
+                        "type": "string",
+                        "description": "CPF do revendedor"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email do revendedor"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha de acesso"
+                    },
+                    "topSeller": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Define se uma compra cadastrada será aprovada sem analise prévia"
+                    }
+                }
+            },
+            "ResellerLogin": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "Email do revendedor"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha do revendedor"
+                    }
+                }
+            },
+            "CreateOrder": {
+                "type": "object",
+                "properties": {
+                    "buyerEmail": {
+                        "type": "string",
+                        "description": "Email do comprador"
+                    },
+                    "buyerCpf": {
+                        "type": "string",
+                        "description": "CPF do comprador"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "Preço total da compra"
+                    }
+                }
+            },
+            "OrdersList": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "description": "Identificador da compra"
+                        },
+                        "buyerEmail": {
+                            "type": "string",
+                            "description": "Email do comprador"
+                        },
+                        "buyerCpf": {
+                            "type": "string",
+                            "description": "CPF do comprador"
+                        },
+                        "resellerCpf": {
+                            "type": "string",
+                            "description": "CPF do revendedor"
+                        },
+                        "status": {
+                            "type": "string",
+                            "enum": ["PENDING", "APPROVED", "CANCELLED"]
+                        },
+                        "date": {
+                            "type": "string",
+                            "description": "Data do cadastro da compra no formato IS"
+                        },
+                        "price": {
+                            "type": "number",
+                            "description": "Preço total da compra"
+                        },
+                        "cashbackAmount": {
+                            "type": "number",
+                            "description": "Valor total do cashback da compra"
+                        },
+                        "cashbackPercentage": {
+                            "type": "number",
+                            "description": "Cashback aplicado em porcentagem"
+                        }
+                    }
+                }
+            },
+            "Order": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Identificador da compra"
+                    },
+                    "buyerEmail": {
+                        "type": "string",
+                        "description": "Email do comprador"
+                    },
+                    "buyerCpf": {
+                        "type": "string",
+                        "description": "CPF do comprador"
+                    },
+                    "resellerCpf": {
+                        "type": "string",
+                        "description": "CPF do revendedor"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": ["PENDING", "APPROVED", "CANCELLED"]
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "Data do cadastro da compra no formato IS"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "Preço total da compra"
+                    },
+                    "cashbackAmount": {
+                        "type": "number",
+                        "description": "Valor total do cashback da compra"
+                    },
+                    "cashbackPercentage": {
+                        "type": "number",
+                        "description": "Cashback aplicado em porcentagem"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "jwt"
+            }
+        }
+    }
+}

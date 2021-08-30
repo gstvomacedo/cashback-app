@@ -1,8 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import * as http from "http";
-
 import * as dotenv from "dotenv";
-
 import * as winston from "winston";
 import * as expressWinston from "express-winston";
 import cors from "cors";
@@ -13,6 +11,8 @@ import { ResellersRoutes } from "./resellers/resellers.routes";
 import { OrdersRoutes } from "./orders/orders.routes";
 import { CashbackRoutes } from "./cashback/cashback.routes";
 import { AuthRoutes } from "./auth/auth.routes";
+import swaggetUi from "swagger-ui-express";
+import swaggerDocs from "./swagger.json";
 
 dotenv.config();
 const app: express.Application = express();
@@ -43,6 +43,8 @@ routes.push(new AuthRoutes(app));
 routes.push(new ResellersRoutes(app));
 routes.push(new OrdersRoutes(app));
 routes.push(new CashbackRoutes(app));
+
+app.use("/docs", swaggetUi.serve, swaggetUi.setup(swaggerDocs));
 
 const serverStartedMessage = `Node server started at http://localhost:${port}`;
 app.get('/', (req: Request, res: Response) => {
