@@ -19,7 +19,7 @@ export class OrdersRoutes extends CommonRoutesConfig {
         body("price").isNumeric(),
         body("buyerCpf")
         .isString()
-        .isLength({ min:11, max: 11 })
+        .isLength({ min: 11, max: 11 })
         .withMessage("O CPF deve ser enviado sem characteres especiais"),
         jwtMiddleware.validJwtNeeded,
         bodyValidationMiddleware.verifyBodyFieldErrors,
