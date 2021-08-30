@@ -25,7 +25,12 @@ app.use(express.json());
 app.use(cors());
 
 const loggerOptions: expressWinston.LoggerOptions = {
-  transports: [new winston.transports.Console()],
+  transports: [
+    new winston.transports.File({
+      filename: 'verbose.log',
+      level: 'verbose',
+  }),
+  new winston.transports.Console()],
   format: winston.format.combine(
     winston.format.json(),
     winston.format.prettyPrint(),
