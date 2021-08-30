@@ -2,7 +2,6 @@ import debug from "debug";
 import express, { Request, Response } from "express";
 import { httpStatusCode } from "../../common/common.httpStatusCodes";
 import ordersService from "../service/orders.service";
-import resellersController from "../../resellers/controller/resellers.controller";
 
 const log: debug.IDebugger = debug("app:orders-controller");
 

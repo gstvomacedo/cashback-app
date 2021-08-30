@@ -56,30 +56,6 @@ class ResellersMiddleware {
       next();
     }
   }
-
-  async validateLogin(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    const reseller = await resellersService.getResellerWithPasswordHashByEmail(req.body.email);
-
-    if (reseller === null) {
-      res.status(httpStatusCode.BAD_REQUEST).send({
-        error: `Não foi possível encontrar o usuário para o email informado (${req.body.email}).`
-      });
-      return;
-    }
-    const passwordMatchesWithHash = await argon2d.verify(String(reseller.password), req.body.password)
-
-    if (passwordMatchesWithHash) {
-      next();
-    } else {
-      res.status(httpStatusCode.BAD_REQUEST).send({
-        erro: "Senha inválida"
-      });
-    }
-  }
 }
 
 export default new ResellersMiddleware();
