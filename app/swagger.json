@@ -36,7 +36,7 @@
                                 "Revendedora topSeller (aprovação automatica de vendas)": {
                                     "value": {
                                         "name": "Paula",
-                                        "cpf": "12345678912",
+                                        "cpf": "15350946056",
                                         "email": "paula@franquia.com",
                                         "password": "12345",
                                         "topSeller": true
@@ -160,34 +160,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/OrdersList"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Erro na listagem das compras"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    }
-                }
-            }
-        },
-        "/orders/orderId": {
-            "get": {
-                "summary": "Listar compra por ID",
-                "description": "Lista compra por ID informado",
-                "tags": ["Orders (Compras)"],
-                "security": [{
-                    "bearerAuth": []
-                }],
-                "responses": {
-                    "200": {
-                        "description": "Obtem compra",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Order"
                                 }
                             }
                         }
