@@ -15,7 +15,8 @@ class AuthMiddleware {
         if (await argon2d.verify(reseller.password, req.body.password)) {
           req.body = {
             resellerId: reseller._id,
-            email: reseller.email
+            email: reseller.email,
+            cpf: reseller.cpf,
           };
 
           return next();;

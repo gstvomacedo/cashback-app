@@ -40,6 +40,7 @@ class JwtMiddleware {
       req.body = {
         resellerId: reseller._id,
         email: reseller.email,
+        cpf: reseller.cpf,
       };
 
       return next();
