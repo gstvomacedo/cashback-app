@@ -4,6 +4,7 @@ import { body } from "express-validator"
 import bodyValidationMiddleware from "../common/middlewares/body-validation.middleware";
 import resellersMiddleware from "./middleware/resellers.middleware";
 import resellersController from "./controller/resellers.controller";
+import jwtMiddleware from "../auth/middleware/jwt.middleware";
 
 export class ResellersRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -29,16 +30,6 @@ export class ResellersRoutes extends CommonRoutesConfig {
         resellersController.addReseller
       );
 
-    this.app
-      .post("/resellers/login", [
-        body("email").isEmail(),
-        body("password").isString(),
-        bodyValidationMiddleware.verifyBodyFieldErrors,
-        resellersMiddleware.validateLogin,
-        resellersController.loginReseller
-      ]);
-
-
-    return this.app;
+      return this.app;
   }
 }

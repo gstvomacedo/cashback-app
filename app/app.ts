@@ -12,6 +12,7 @@ import { httpStatusCode } from "./common/common.httpStatusCodes";
 import { ResellersRoutes } from "./resellers/resellers.routes";
 import { OrdersRoutes } from "./orders/orders.routes";
 import { CashbackRoutes } from "./cashback/cashback.routes";
+import { AuthRoutes } from "./auth/auth.routes";
 
 dotenv.config();
 const app: express.Application = express();
@@ -38,6 +39,7 @@ if (!process.env.DEBUG) {
 
 app.use(expressWinston.logger(loggerOptions));
 
+routes.push(new AuthRoutes(app));
 routes.push(new ResellersRoutes(app));
 routes.push(new OrdersRoutes(app));
 routes.push(new CashbackRoutes(app));

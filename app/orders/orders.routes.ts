@@ -4,6 +4,7 @@ import { body, param } from "express-validator";
 import ordersController from "./controller/orders.controller";
 import bodyValidationMiddleware from "../common/middlewares/body-validation.middleware";
 import resellersMiddleware from "../resellers/middleware/resellers.middleware";
+import jwtMiddleware from "../auth/middleware/jwt.middleware";
 
 export class OrdersRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -21,6 +22,7 @@ export class OrdersRoutes extends CommonRoutesConfig {
         .isString()
         .isLength({ min:11, max: 11 })
         .withMessage("O CPF deve ser enviado sem characteres especiais"),
+        jwtMiddleware.validJwtNeeded,
         bodyValidationMiddleware.verifyBodyFieldErrors,
         resellersMiddleware.validateNotExistingReseller,
         ordersController.addOrder
@@ -28,13 +30,15 @@ export class OrdersRoutes extends CommonRoutesConfig {
 
     this.app
       .get("/orders", [
-      ordersController.listOrders
+        jwtMiddleware.validJwtNeeded,
+        ordersController.listOrders
       ]);
 
     this.app
       .get("/orders/:orderId", [
         param("orderId")
           .isString(),
+        jwtMiddleware.validJwtNeeded,
         ordersController.getOrderById
       ]);
 
