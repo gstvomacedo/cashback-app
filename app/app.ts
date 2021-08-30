@@ -44,12 +44,9 @@ routes.push(new ResellersRoutes(app));
 routes.push(new OrdersRoutes(app));
 routes.push(new CashbackRoutes(app));
 
-app.use("/docs", swaggetUi.serve, swaggetUi.setup(swaggerDocs));
+app.use("/", swaggetUi.serve, swaggetUi.setup(swaggerDocs));
 
 const serverStartedMessage = `Node server started at http://localhost:${port}`;
-app.get('/', (req: Request, res: Response) => {
-  res.status(httpStatusCode.OK).send(serverStartedMessage);
-})
 
 server.listen(port, () => {
   routes.forEach((route: CommonRoutesConfig) => {
